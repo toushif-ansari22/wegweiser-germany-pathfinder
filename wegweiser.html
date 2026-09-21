@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wegweiser — Your Path to Germany</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+
+    --paper: #F1F1EA;
+    --paper-2: #E6E4D8;
+    --ink: #15171C;
+    --ink-soft: #4A4D55;
+    --graphite: #3B4252;
+    --line: #CFCCBE;
+    --signal: #B8842A;
+    --signal-ink: #6E4E17;
+    --success: #3F7053;
+    --success-bg: #E4EDE6;
+    --alert: #A84432;
+    --alert-bg: #F3E4DF;
+    --partial: #8A6D1E;
+    --partial-bg: #F1E9D3;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14161B;
+      --paper-2: #1B1E24;
+      --ink: #ECEBE4;
+      --ink-soft: #A9ACB6;
+      --graphite: #A9B4C4;
+      --line: #33363E;
+      --signal: #D4A03C;
+      --signal-ink: #F0C978;
+      --success: #6FAE85;
+      --success-bg: #1C2A21;
+      --alert: #D98368;
+      --alert-bg: #2E2019;
+      --partial: #D7B45C;
+      --partial-bg: #2C2818;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14161B;
+    --paper-2: #1B1E24;
+    --ink: #ECEBE4;
+    --ink-soft: #A9ACB6;
+    --graphite: #A9B4C4;
+    --line: #33363E;
+    --signal: #D4A03C;
+    --signal-ink: #F0C978;
+    --success: #6FAE85;
+    --success-bg: #1C2A21;
+    --alert: #D98368;
+    --alert-bg: #2E2019;
+    --partial: #D7B45C;
+    --partial-bg: #2C2818;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, .brand, .route-name, label.section-label {
+    font-family: 'Oswald', 'Arial Narrow', system-ui, sans-serif;
+    letter-spacing: 0.01em;
+  }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  header.top {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 24px;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    font-size: clamp(2.1rem, 5vw, 3.1rem);
+    font-weight: 600;
+    margin: 0;
+    line-height: 1;
+  }
+  .brand span { color: var(--signal); }
+  .tagline {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    max-width: 340px;
+    margin: 10px 0 0;
+  }
+  .meta-note {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    text-align: right;
+    max-width: 260px;
+  }
+
+  main.grid {
+    display: grid;
+    grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    main.grid { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+  }
+
+  form.panel { padding: 28px 24px; }
+
+  fieldset {
+    border: none;
+    margin: 0 0 28px;
+    padding: 0;
+  }
+  fieldset:last-of-type { margin-bottom: 0; }
+
+  label.section-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--graphite);
+    margin-bottom: 10px;
+    border-left: 3px solid var(--signal);
+    padding-left: 8px;
+  }
+
+  .option-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 0.92rem;
+  }
+  .option:hover { border-color: var(--line); }
+  .option input { margin-top: 3px; accent-color: var(--signal); }
+  .option.checked { background: var(--paper); border-color: var(--line); }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  select, input[type="number"] {
+    width: 100%;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.92rem;
+    padding: 9px 10px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    color: var(--ink);
+  }
+  select:focus, input:focus, .option input:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 1px;
+  }
+  .field-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    margin-bottom: 5px;
+  }
+  .sub-field { margin-top: 12px; }
+
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+  .checkbox-row input { accent-color: var(--signal); }
+
+  button#compute {
+    width: 100%;
+    padding: 14px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  button#compute:hover { background: var(--signal-ink); }
+  @media (prefers-color-scheme: dark) {
+    button#compute:hover { background: var(--signal); color: var(--ink); }
+  }
+
+  .results { display: flex; flex-direction: column; gap: 18px; }
+
+  .headline-result {
+    padding: 20px 22px;
+    border: 1px solid var(--ink);
+    display: none;
+  }
+  .headline-result.show { display: block; }
+  .headline-result .label {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .headline-result .value {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  .route-card {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--line);
+    padding: 20px 22px;
+    background: var(--paper-2);
+  }
+  .route-card.eligible { border-left-color: var(--success); }
+  .route-card.partial { border-left-color: var(--partial); }
+  .route-card.not-yet { border-left-color: var(--alert); }
+
+  .route-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .route-name { font-size: 1.15rem; font-weight: 500; margin: 0; }
+  .status-tag {
+    font-size: 0.72rem;
+    padding: 3px 9px;
+    border: 1px solid currentColor;
+    white-space: nowrap;
+  }
+  .route-card.eligible .status-tag { color: var(--success); }
+  .route-card.partial .status-tag { color: var(--partial); }
+  .route-card.not-yet .status-tag { color: var(--alert); }
+
+  .route-desc {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+  }
+  ul.reasons {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 0.88rem;
+  }
+  ul.reasons li { margin-bottom: 5px; }
+  ul.reasons li:last-child { margin-bottom: 0; }
+
+  .empty-state {
+    border: 1px dashed var(--line);
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+  }
+
+  footer {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    max-width: 700px;
+  }
+  footer a { color: var(--graphite); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <h1 class="brand">Weg<span>weiser</span></h1>
+      <p class="tagline">A route-finder for Germany's three main skilled-worker pathways, built while planning my own move.</p>
+    </div>
+    <p class="meta-note">Based on 2026 rules (EU Blue Card, Chancenkarte, Ausbildung). Not legal advice — verify current figures with official sources before you apply.</p>
+  </header>
+
+  <main class="grid">
+    <form class="panel" id="checker-form">
+
+      <fieldset>
+        <label class="section-label">Highest qualification</label>
+        <div class="option-row" id="qual-options">
+          <label class="option"><input type="radio" name="qual" value="none"> No diploma/degree yet</label>
+          <label class="option"><input type="radio" name="qual" value="short-voc"> Diploma / vocational, under 2 years</label>
+          <label class="option"><input type="radio" name="qual" value="long-voc" checked> Diploma / vocational, 2+ years (state-recognized)</label>
+          <label class="option"><input type="radio" name="qual" value="bachelor"> Bachelor's degree</label>
+          <label class="option"><input type="radio" name="qual" value="master"> Master's degree or higher</label>
+        </div>
+        <div class="sub-field" id="recognition-field">
+          <label class="field-label" for="recognized">Is it recognized in Germany? (ANABIN)</label>
+          <select id="recognized">
+            <option value="yes">Yes, confirmed</option>
+            <option value="unsure" selected>Not sure yet</option>
+            <option value="no">No / not listed</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <label class="section-label">Experience &amp; offer</label>
+        <div class="two-col">
+          <div>
+            <label class="field-label" for="experience">Relevant IT experience (years)</label>
+            <input type="number" id="experience" min="0" max="40" value="0" step="0.5">
+          </div>
+          <div>
+            <label class="field-label" for="age">Age</label>
+            <input type="number" id="age" min="16" max="60" value="20">
+          </div>
+        </div>
+        <div class="sub-field">
+          <label class="field-label">Do you have a binding job offer from a German employer?</label>
+          <select id="jobOffer">
+            <option value="no" selected>No, not yet</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+        <div class="sub-field" id="salary-field" style="display:none;">
+          <label class="field-label" for="salary">Annual gross salary offered (EUR)</label>
+          <input type="number" id="salary" min="0" step="500" value="0">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <label class="section-label">Languages</label>
+        <div class="two-col">
+          <div>
+            <label class="field-label" for="german">German level</label>
+            <select id="german">
+              <option value="none" selected>None</option>
+              <option value="A1">A1</option>
+              <option value="A2">A2</option>
+              <option value="B1">B1</option>
+              <option value="B2">B2</option>
+              <option value="C1">C1 or higher</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" for="english">English level</label>
+            <select id="english">
+              <option value="below-b2">Below B2</option>
+              <option value="b2plus" selected>B2 or higher</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <label class="section-label">Funds</label>
+        <label class="checkbox-row">
+          <input type="checkbox" id="funds" checked>
+          I can show roughly €13,000 for a year (blocked account or equivalent)
+        </label>
+      </fieldset>
+
+      <button type="button" id="compute">Check my paths →</button>
+    </form>
+
+    <section class="results" id="results">
+      <div class="empty-state">Fill in the form and press "Check my paths" to see where you stand on each route.</div>
+    </section>
+  </main>
+
+  <footer>
+    Built as a personal project while researching my own path from India to Germany. Rules change yearly —
+    always cross-check thresholds with the <a href="https://www.make-it-in-germany.com" target="_blank" rel="noopener">Federal Foreign Office / Make it in Germany</a> before making decisions.
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  const form = document.getElementById('checker-form');
+  const qualRadios = form.querySelectorAll('input[name="qual"]');
+  const recognitionField = document.getElementById('recognition-field');
+  const jobOfferSelect = document.getElementById('jobOffer');
+  const salaryField = document.getElementById('salary-field');
+  const resultsEl = document.getElementById('results');
+
+  function updateVisibility() {
+    const qual = form.querySelector('input[name="qual"]:checked').value;
+    recognitionField.style.display = (qual === 'none') ? 'none' : 'block';
+    salaryField.style.display = (jobOfferSelect.value === 'yes') ? 'block' : 'none';
+
+    form.querySelectorAll('.option').forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.classList.toggle('checked', input.checked);
+    });
+  }
+  qualRadios.forEach(r => r.addEventListener('change', updateVisibility));
+  jobOfferSelect.addEventListener('change', updateVisibility);
+  updateVisibility();
+
+  function getInputs() {
+    return {
+      qual: form.querySelector('input[name="qual"]:checked').value,
+      recognized: document.getElementById('recognized').value,
+      experience: parseFloat(document.getElementById('experience').value) || 0,
+      age: parseInt(document.getElementById('age').value, 10) || 0,
+      jobOffer: jobOfferSelect.value === 'yes',
+      salary: parseFloat(document.getElementById('salary').value) || 0,
+      german: document.getElementById('german').value,
+      english: document.getElementById('english').value,
+      funds: document.getElementById('funds').checked
+    };
+  }
+
+  const germanRank = { none: 0, A1: 1, A2: 2, B1: 3, B2: 4, C1: 5 };
+
+  function evalBlueCard(d) {
+    const reasons = [];
+    if (!d.jobOffer) {
+      return { status: 'not-yet', reasons: ['Needs a binding job offer from a German employer — this is the one route that requires an offer in hand before you apply.'] };
+    }
+    const hasDegree = (d.qual === 'bachelor' || d.qual === 'master');
+    const degreeOk = hasDegree && d.recognized === 'yes';
+    const degreeUnsure = hasDegree && d.recognized === 'unsure';
+    const itNoDegree = d.experience >= 3;
+
+    if (!degreeOk && !degreeUnsure && !itNoDegree) {
+      reasons.push('Needs either a recognized Bachelor\'s/Master\'s degree, or 3+ years of relevant IT experience under the no-degree IT specialist route (§18g).');
+      return { status: 'not-yet', reasons };
+    }
+    if (degreeUnsure) {
+      reasons.push('Your degree may qualify, but recognition status is unconfirmed — check the ANABIN database or get a Statement of Comparability (ZAB) to be sure.');
+    }
+    const threshold = (degreeOk || degreeUnsure || (itNoDegree && !hasDegree)) ? 45934.20 : 50700;
+    const thresholdLabel = threshold === 45934.20 ? '€45,934 (reduced threshold)' : '€50,700 (standard threshold)';
+
+    if (itNoDegree && !hasDegree) {
+      reasons.push('Qualifies via the IT-specialist-without-degree pathway (3+ years relevant experience in the last 7 years).');
+    }
+    if (d.salary >= threshold) {
+      reasons.push('Offered salary of €' + d.salary.toLocaleString() + ' clears the ' + thresholdLabel + ' threshold.');
+      return { status: degreeUnsure ? 'partial' : 'eligible', reasons };
+    } else {
+      reasons.push('Offered salary needs to reach ' + thresholdLabel + ' — currently short by €' + Math.max(0, threshold - d.salary).toLocaleString() + '.');
+      return { status: 'not-yet', reasons };
+    }
+  }
+
+  function evalChancenkarte(d) {
+    const reasons = [];
+    const qualifiesLength = (d.qual === 'long-voc' || d.qual === 'bachelor' || d.qual === 'master');
+    const baselineLang = (germanRank[d.german] >= 1) || (d.english === 'b2plus');
+    if (!baselineLang) {
+      reasons.push('Baseline language requirement not met — needs German A1 or English B2.');
+      return { status: 'not-yet', reasons };
+    }
+    if (!d.funds) {
+      reasons.push('Needs proof of funds (~€13,000/year) via a blocked account or similar before applying.');
+    }
+    if (qualifiesLength && d.recognized === 'yes') {
+      reasons.push('Qualification is 2+ years and confirmed recognized — direct route, no points needed.');
+      reasons.push('Meets baseline language requirement.');
+      return { status: d.funds ? 'eligible' : 'partial', reasons };
+    }
+
+    let points = 0;
+    const pointsBreakdown = [];
+    if (d.experience >= 5) { points += 2; pointsBreakdown.push('+2 for 5+ years experience'); }
+    else if (d.experience >= 2) { points += 1; pointsBreakdown.push('+1 for 2+ years experience'); }
+
+    if (germanRank[d.german] >= 4) { points += 3; pointsBreakdown.push('+3 for German B2+'); }
+    else if (d.german === 'B1') { points += 2; pointsBreakdown.push('+2 for German B1'); }
+    else if (d.german === 'A2') { points += 1; pointsBreakdown.push('+1 for German A2'); }
+
+    if (d.english === 'b2plus' && germanRank[d.german] < 4) { points += 1; pointsBreakdown.push('+1 for English B2+'); }
+
+    if (d.age < 35) { points += 2; pointsBreakdown.push('+2 for age under 35'); }
+    else if (d.age < 40) { points += 1; pointsBreakdown.push('+1 for age under 40'); }
+
+    reasons.push('Estimated points: ' + points + '/6 needed (' + (pointsBreakdown.join(', ') || 'no points yet') + '). This is indicative only — the official grid has more categories.');
+    if (!qualifiesLength) {
+      reasons.push('Qualification also needs to be at least 2 years of recognized vocational training or a degree to use this route at all.');
+      return { status: 'not-yet', reasons };
+    }
+    if (points >= 6) {
+      return { status: d.funds ? 'eligible' : 'partial', reasons };
+    }
+    return { status: 'not-yet', reasons };
+  }
+
+  function evalAusbildung(d) {
+    const reasons = [];
+    const rank = germanRank[d.german];
+    if (rank >= 3) {
+      reasons.push('German at B1 or above — enough to start applying to companies for an Ausbildung training contract.');
+      reasons.push('No degree or prior experience needed for this route; the training itself builds your recognized qualification.');
+      return { status: 'eligible', reasons };
+    }
+    if (rank >= 1) {
+      reasons.push('German is below B1 — most companies expect at least B1 (some accept B1 during, not before, the contract). Keep building language before applying.');
+      reasons.push('Current level: ' + d.german + '. Target B1 as the next milestone.');
+      return { status: 'partial', reasons };
+    }
+    reasons.push('German hasn\'t been started yet — this is the main blocker for Ausbildung. Aim for A2–B1 before applying to companies.');
+    return { status: 'not-yet', reasons };
+  }
+
+  const statusLabel = { eligible: 'Ready now', partial: 'Close', 'not-yet': 'Not yet' };
+  const routeDesc = {
+    blueCard: 'Skilled-worker residence permit — needs a job offer meeting salary thresholds.',
+    chancenkarte: 'Job-search permit — up to 12 months in Germany to find a skilled job.',
+    ausbildung: 'Paid vocational training (3 years) — builds a German-recognized qualification.'
+  };
+
+  function renderCard(id, name, result) {
+    return '<div class="route-card ' + result.status + '">' +
+      '<div class="route-top"><h3 class="route-name">' + name + '</h3>' +
+      '<span class="status-tag">' + statusLabel[result.status] + '</span></div>' +
+      '<p class="route-desc">' + routeDesc[id] + '</p>' +
+      '<ul class="reasons">' + result.reasons.map(r => '<li>' + r + '</li>').join('') + '</ul>' +
+      '</div>';
+  }
+
+  function pickHeadline(results) {
+    const order = ['ausbildung', 'chancenkarte', 'blueCard'];
+    const names = { ausbildung: 'Ausbildung', chancenkarte: 'Chancenkarte', blueCard: 'EU Blue Card' };
+    const rank = { eligible: 2, partial: 1, 'not-yet': 0 };
+    let best = null;
+    order.forEach(id => {
+      if (!best || rank[results[id].status] > rank[results[best].status]) best = id;
+    });
+    if (rank[results[best].status] === 0) {
+      return 'No route is ready yet — start with German language and experience; re-check as you progress.';
+    }
+    return (rank[results[best].status] === 2 ? 'Strongest route right now: ' : 'Closest route right now: ') + names[best];
+  }
+
+  document.getElementById('compute').addEventListener('click', function () {
+    const d = getInputs();
+    const results = {
+      blueCard: evalBlueCard(d),
+      chancenkarte: evalChancenkarte(d),
+      ausbildung: evalAusbildung(d)
+    };
+
+    let html = '<div class="headline-result show"><div class="label">Summary</div><div class="value">' + pickHeadline(results) + '</div></div>';
+    html += renderCard('ausbildung', 'Ausbildung', results.ausbildung);
+    html += renderCard('chancenkarte', 'Chancenkarte (Opportunity Card)', results.chancenkarte);
+    html += renderCard('blueCard', 'EU Blue Card', results.blueCard);
+    resultsEl.innerHTML = html;
+
+    try {
+      localStorage.setItem('wegweiser-last-input', JSON.stringify(d));
+    } catch (e) { /* storage unavailable, ignore */ }
+  });
+
+  try {
+    const saved = localStorage.getItem('wegweiser-last-input');
+    if (saved) {
+      const d = JSON.parse(saved);
+      if (d.qual) form.querySelector('input[name="qual"][value="' + d.qual + '"]').checked = true;
+      if (d.recognized) document.getElementById('recognized').value = d.recognized;
+      if (typeof d.experience === 'number') document.getElementById('experience').value = d.experience;
+      if (typeof d.age === 'number') document.getElementById('age').value = d.age;
+      if (typeof d.jobOffer === 'boolean') jobOfferSelect.value = d.jobOffer ? 'yes' : 'no';
+      if (typeof d.salary === 'number') document.getElementById('salary').value = d.salary;
+      if (d.german) document.getElementById('german').value = d.german;
+      if (d.english) document.getElementById('english').value = d.english;
+      if (typeof d.funds === 'boolean') document.getElementById('funds').checked = d.funds;
+      updateVisibility();
+    }
+  } catch (e) { /* ignore */ }
+})();
+</script>
+</body>
+</html>
